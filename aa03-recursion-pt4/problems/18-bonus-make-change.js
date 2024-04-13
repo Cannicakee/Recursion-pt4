@@ -9,11 +9,11 @@ change for the given target amount.
 
 Examples:
 
-makeChange(21); // [1, 10, 10]
-makeChange(75); // [25, 25, 25]
-makeChange(33, [15, 3]); // [3, 15, 15]
-makeChange(34, [15, 3]); // null
-makeChange(24, [10, 7, 1]) // [7, 7, 10]
+makeBetterChange(21); // [1, 10, 10]
+makeBetterChange(75); // [25, 25, 25]
+makeBetterChange(33, [15, 3]); // [3, 15, 15]
+makeBetterChange(34, [15, 3]); // null
+makeBetterChange(24, [10, 7, 1]) // [7, 7, 10]
 
 Here's a game plan for solving the problem:
 
@@ -56,8 +56,46 @@ combinations.
 ***********************************************************************/
 
 function makeBetterChange(target, coins = [25, 10, 5, 1]) {
-  // Your code here 
+  if (target === 0) {
+    return [0, []];
+  }
+  if (coins.length === 0 && target > 0) {
+    return [Infinity, []];
+  }
+  if (coins[0] > target) {
+    return makeBetterChange(target, coins.slice(1));
+  } else {
+    var loseIt = makeBetterChange(target, coins.slice(1));  // just one call of makeBetterChange
+    var useIt = makeBetterChange(target - coins[0], coins); // just one call of makeBetterChange
+    if (loseIt[0] < 1 + useIt[0]) {
+      return loseIt;
+    } else {
+      return [1 + useIt[0], useIt[1].concat(coins[0])];
+    }
+  }
 }
+
+//console.log(makeBetterChange(21)); // [1, 10, 10]
+// console.log(makeBetterChange(75)); // [25, 25, 25]
+console.log(makeBetterChange(33, [15, 3])); // [3, 15, 15]
+// console.log(makeBetterChange(34, [15, 3])); // null
+// console.log(makeBetterChange(24, [10, 7, 1])) // [7, 7, 10]
+
+//    newArr = [];
+//   if (target === 0) return;
+//  // for (let i = 0; i < coins.length; i++) {
+//   let i = 0;
+//   while (i < coins.length) {
+//     let coin = coins[i]
+//     if (coin <= target) {
+//     newArr.unshift(coin)
+//     target -= coin
+//     let result = newArr.concat(makeBetterChange(target, coins = [25, 10, 5, 1]))//.concat(newArr)
+//     return result
+//     }
+//     i++
+//   }
+// return newArr
 
 
 /**************DO NOT MODIFY ANYTHING UNDER THIS LINE*****************/
