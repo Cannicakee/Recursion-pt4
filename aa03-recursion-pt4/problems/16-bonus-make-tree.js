@@ -64,11 +64,26 @@ The call above should return the tree below:
 }
 
 ***********************************************************************/
-
 const makeTree = (categories, parent) => {
-  // Your code here 
+    let tree = {}
+    categories
+        .filter(obj => obj.parent === parent)
+        .forEach(obj => tree[obj.id] =
+            makeTree(categories, obj.id))
+    return tree
 };
+const categories2 = [
+    { id: 'animals', 'parent': null },
+    { id: 'mammals', 'parent': 'animals' },
+    { id: 'cats', 'parent': 'mammals' },
+    { id: 'dogs', 'parent': 'mammals' },
+    { id: 'chihuahua', 'parent': 'dogs' },
+    { id: 'labrador', 'parent': 'dogs' },
+    { id: 'persian', 'parent': 'cats' },
+    { id: 'siamese', 'parent': 'cats' }
+];
 
+console.log(JSON.stringify(makeTree(categories2, null)))
 /**************DO NOT MODIFY ANYTHING UNDER THIS LINE*****************/
 module.exports = makeTree;
 
